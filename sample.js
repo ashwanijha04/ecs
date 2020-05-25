@@ -18,6 +18,26 @@
 var AWS = require('aws-sdk');
 var uuid = require('node-uuid');
 
+// Create an S3 client
+// var s3 = new AWS.S3();
+
+// Create a bucket and upload something into it
+// var bucketName = 'node-sdk-sample-' + uuid.v4();
+// var keyName = 'hello_world.txt';
+
+// s3.createBucket({Bucket: bucketName}, function() {
+//   var params = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
+//   s3.putObject(params, function(err, data) {
+//     if (err)
+//       console.log(err)
+//     else
+//       console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+//   });
+// });
+
+
+// Create the AWS ECS client
+
 const ecs = new AWS.ECS({
     region: "us-east-1"
 });
@@ -32,12 +52,12 @@ function runECSTasks(clusterName, taskDefinition, count) {
             networkConfiguration: {
                 awsvpcConfiguration: {
                     subnets: [
-                        "subnet-5bxxxxxxxx5",
-                        "subnet-8fb4xxxxxxx5"
+                        "subnet-5b1dab65",
+                        "subnet-8fb486c5"
                     ],
                     assignPublicIp: "ENABLED",
                     securityGroups: [
-                        "sg-0c80xxxxxf717689f"
+                        "sg-0c8004d71f717689f"
                     ]
                 }
             }
@@ -55,7 +75,11 @@ function runECSTasks(clusterName, taskDefinition, count) {
 function checkForRunningTasks(clusterName, {tasks}) {
     let params = {
         tasks: [],
-        cluster: clusterName
+        cluster: clusterName,
+        $waiter: {
+            delay: 0.5,
+            maxAttempts: 6
+        }
     };
 
     for (let i = 0; i < tasks.length; i++) {
@@ -64,13 +88,13 @@ function checkForRunningTasks(clusterName, {tasks}) {
 
     console.log(params);
 
-    console.log("// After retries results :-")
+    console.log("After retries:  ")
 
     ecs.waitFor('tasksRunning', params, function(err, data) { // waits for ECS tasks to be into RUNNING state
-        if (err) console.log(err.message);
+        if (err) {console.log("Error"); console.log(err.stack);}
         else console.log(data);
     });
 
 }
 
-runECSTasks("testRetries", "FargateNGINX:3", 10); // cluster name , task definition, count of tasks to run at a time.
+runECSTasks("testThrottling", "FargateNGINX:3", 6); // cluster name , task definition, count of tasks to run at a time.
