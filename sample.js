@@ -52,8 +52,8 @@ function runECSTasks(clusterName, taskDefinition, count) {
             networkConfiguration: {
                 awsvpcConfiguration: {
                     subnets: [
-                        "subnet-5b1dab65",
-                        "subnet-8fb486c5"
+                        "subnet-5bxxxxxxxx5",
+                        "subnet-8fb4xxxxxxx5"
                     ],
                     assignPublicIp: "ENABLED",
                     securityGroups: [
