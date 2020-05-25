@@ -18,26 +18,6 @@
 var AWS = require('aws-sdk');
 var uuid = require('node-uuid');
 
-// Create an S3 client
-// var s3 = new AWS.S3();
-
-// Create a bucket and upload something into it
-// var bucketName = 'node-sdk-sample-' + uuid.v4();
-// var keyName = 'hello_world.txt';
-
-// s3.createBucket({Bucket: bucketName}, function() {
-//   var params = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
-//   s3.putObject(params, function(err, data) {
-//     if (err)
-//       console.log(err)
-//     else
-//       console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
-//   });
-// });
-
-
-// Create the AWS ECS client
-
 const ecs = new AWS.ECS({
     region: "us-east-1"
 });
@@ -57,7 +37,7 @@ function runECSTasks(clusterName, taskDefinition, count) {
                     ],
                     assignPublicIp: "ENABLED",
                     securityGroups: [
-                        "sg-0c8004d71f717689f"
+                        "sg-0c80xxxxxf717689f"
                     ]
                 }
             }
@@ -93,4 +73,4 @@ function checkForRunningTasks(clusterName, {tasks}) {
 
 }
 
-runECSTasks("testThrottling", "FargateNGINX:3", 2); // cluster name , task definition, count of tasks to run at a time.
+runECSTasks("testRetries", "FargateNGINX:3", 10); // cluster name , task definition, count of tasks to run at a time.
