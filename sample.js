@@ -80,4 +80,4 @@ function checkForRunningTasks(clusterName, {tasks}) {
 
 }
 
-runECSTasks("testThrottling", "FargateNGINX:3", 6); // cluster name , task definition, count of tasks to run at a time.
+runECSTasks("testRetries", "FargateNGINX:3", 6); // cluster name , task definition, count of tasks to run at a time.
